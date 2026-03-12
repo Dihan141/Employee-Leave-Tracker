@@ -19,9 +19,15 @@ namespace backend.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var employee = await _context.Employees.FindAsync(id);
+
+            if (employee != null)
+            {
+                _context.Employees.Remove(employee);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<List<Employee>> GetAllAsync()
@@ -29,19 +35,22 @@ namespace backend.Repositories
             return await _context.Employees.AsNoTracking().ToListAsync();
         }
 
-        public Task<Employee?> GetByEmailAsync(string email)
+        public async Task<Employee?> GetByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            return await _context.Employees
+            .FirstOrDefaultAsync(e => e.Email == email);
         }
 
-        public Task<Employee?> GetByIdAsync(int id)
+        public async Task<Employee?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Employees
+           .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public Task UpdateAsync(Employee employee)
+        public async Task UpdateAsync(Employee employee)
         {
-            throw new NotImplementedException();
+            _context.Employees.Update(employee);
+            await _context.SaveChangesAsync();
         }
     }
 }

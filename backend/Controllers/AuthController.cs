@@ -18,9 +18,15 @@ namespace backend.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto dto)
         {
-            var token = await _authService.Login(dto);
-
-            return Ok(new { token });
+            try
+            {
+                var token = await _authService.Login(dto);
+                return Ok(new { token });
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
         }
 
         // One-time admin creation

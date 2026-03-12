@@ -1,4 +1,5 @@
 using backend.DTOs.Auth;
+using backend.Helpers;
 using backend.Interfaces.Repositories;
 using backend.Interfaces.Services;
 using backend.Models;
@@ -37,9 +38,20 @@ namespace backend.Services
             await _employeeRepo.AddAsync(admin);
         }
 
-        public Task<string> Login(LoginDto dto)
+        public async Task<string> Login(LoginDto dto)
         {
-            throw new NotImplementedException();
+            var employee = await _employeeRepo.GetByEmailAsync(dto.Email);
+
+            if (employee == null)
+                throw new Exception("Invalid credentials");
+
+            bool valid = BCrypt.Net.BCrypt.Verify(dto.Password, employee.Password);
+
+            if (!valid)
+                throw new Exception("Invalid credentials");
+
+            // Generate JWT
+            return JwtHelper.GenerateToken(employee, _config);
         }
     }
 }
