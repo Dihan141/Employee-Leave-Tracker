@@ -16,5 +16,6 @@ namespace backend.Models
         public List<Leave> Leaves { get; set; } = new List<Leave>();
 
         public int? TotalLeaves { get; set; }
+        public int? RemainingLeaves { get; set; }
     }
 }

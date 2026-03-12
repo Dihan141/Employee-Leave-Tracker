@@ -78,6 +78,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
+builder.Services.AddScoped<ILeaveRepository, LeaveRepository>();
+builder.Services.AddScoped<ILeaveService, LeaveService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -41,6 +41,7 @@ namespace backend.Services
                 Name = dto.Name,
                 Email = dto.Email,
                 TotalLeaves = dto.TotalLeaves,
+                RemainingLeaves = dto.TotalLeaves,
                 Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 JoiningDate = DateTime.UtcNow
             };
@@ -74,6 +75,9 @@ namespace backend.Services
 
             if (dto.TotalLeaves.HasValue)
                 employee.TotalLeaves = dto.TotalLeaves.Value;
+
+            if (dto.RemainingLeaves.HasValue)
+                employee.RemainingLeaves = dto.RemainingLeaves.Value;
 
 
             if (!string.IsNullOrEmpty(dto.Password))
