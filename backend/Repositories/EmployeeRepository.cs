@@ -41,6 +41,12 @@ namespace backend.Repositories
             .FirstOrDefaultAsync(e => e.Email == email);
         }
 
+        public async Task<List<Employee>> GetByRoleAsync(string role)
+        {
+            return await _context.Employees
+            .Where(e => e.Role == role).ToListAsync();
+        }
+
         public async Task<Employee?> GetByIdAsync(int id)
         {
             return await _context.Employees

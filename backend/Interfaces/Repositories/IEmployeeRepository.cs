@@ -7,6 +7,8 @@ namespace backend.Interfaces.Repositories
         Task<List<Employee>> GetAllAsync();
         Task<Employee?> GetByIdAsync(int id);
 
+        Task<List<Employee>> GetByRoleAsync(string role);
+
         Task<Employee?> GetByEmailAsync(string email);
 
         Task AddAsync(Employee employee);
