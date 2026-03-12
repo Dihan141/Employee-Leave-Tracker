@@ -40,6 +40,7 @@ namespace backend.Services
             {
                 Name = dto.Name,
                 Email = dto.Email,
+                TotalLeaves = dto.TotalLeaves,
                 Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 JoiningDate = DateTime.UtcNow
             };
@@ -55,6 +56,30 @@ namespace backend.Services
                 throw new Exception("Employee not found");
 
             await _employeeRepository.DeleteAsync(id);
+        }
+
+        public async Task UpdateEmployee(int id, UpdateEmployeeDto dto)
+        {
+            var employee = await _employeeRepository.GetByIdAsync(id);
+
+            if (employee == null)
+                throw new Exception("Employee not found");
+
+            // Update fields only if provided
+            if (!string.IsNullOrEmpty(dto.Name))
+                employee.Name = dto.Name;
+
+            if (!string.IsNullOrEmpty(dto.Email))
+                employee.Email = dto.Email;
+
+            if (dto.TotalLeaves.HasValue)
+                employee.TotalLeaves = dto.TotalLeaves.Value;
+
+
+            if (!string.IsNullOrEmpty(dto.Password))
+                employee.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
+            await _employeeRepository.UpdateAsync(employee);
         }
     }
 }

@@ -62,6 +62,22 @@ namespace backend.Controllers
             }
         }
 
+        // Admin: Update employee
+        [Authorize(Roles = "admin")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateEmployee(int id, UpdateEmployeeDto dto)
+        {
+            try
+            {
+                await _employeeService.UpdateEmployee(id, dto);
+                return Ok(new { message = "Employee updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         // Admin: Delete employee
         [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]

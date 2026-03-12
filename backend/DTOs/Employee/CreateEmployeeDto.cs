@@ -7,5 +7,6 @@ namespace backend.DTOs.Employee
         public required string Email { get; set; }
 
         public required string Password { get; set; }
+        public required int TotalLeaves { get; set; }
     }
 }

@@ -8,11 +8,13 @@ namespace backend.Models
     public class Employee
     {
         public int Id { get; set; }
-        public string Name { get; set; } = String.Empty;
-        public string Email { get; set; } = String.Empty;
-        public string Password { get; set; } = String.Empty;
+        public required string Name { get; set; }
+        public required string Email { get; set; }
+        public required string Password { get; set; }
         public string Role { get; set; } = "employee";
         public DateTime JoiningDate { get; set; }
         public List<Leave> Leaves { get; set; } = new List<Leave>();
+
+        public int? TotalLeaves { get; set; }
     }
 }

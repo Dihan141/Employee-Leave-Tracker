@@ -13,6 +13,8 @@ namespace backend.Interfaces.Services
 
         Task CreateEmployee(CreateEmployeeDto dto);
 
+        Task UpdateEmployee(int id, UpdateEmployeeDto dto);
+
         Task DeleteEmployee(int id);
     }
 }

@@ -13,6 +13,6 @@ namespace backend.Models
         public DateTime EndDate { get; set; }
         public string Reason { get; set; } = String.Empty;
         public string Status { get; set; } = "Pending";
-        public Employee Employee { get; set; } = new Employee();
+        public Employee? Employee { get; set; }
     }
 }
