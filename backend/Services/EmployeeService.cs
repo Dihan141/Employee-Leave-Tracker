@@ -1,4 +1,5 @@
 using backend.DTOs.Employee;
+using backend.DTOs.Leave;
 using backend.Interfaces.Repositories;
 using backend.Interfaces.Services;
 using backend.Models;
@@ -24,9 +25,34 @@ namespace backend.Services
             return await _employeeRepository.GetByRoleAsync(role);
         }
 
-        public async Task<Employee?> GetEmployee(int id)
+        public async Task<EmployeeResponseDto?> GetEmployee(int id)
         {
-            return await _employeeRepository.GetByIdAsync(id);
+            var employee = await _employeeRepository.GetByIdAsync(id);
+
+            if (employee == null)
+                return null;
+
+            return new EmployeeResponseDto
+            {
+                Id = employee.Id,
+                Name = employee.Name,
+                Email = employee.Email,
+                Role = employee.Role,
+                JoiningDate = employee.JoiningDate,
+                TotalLeaves = employee.TotalLeaves,
+                RemainingLeaves = employee.RemainingLeaves,
+                Leaves = employee.Leaves.Select(l => new LeaveResponseDto
+                {
+                    Id = l.Id,
+                    EmployeeId = l.EmployeeId,
+                    EmployeeName = employee.Name,
+                    StartDate = l.StartDate,
+                    EndDate = l.EndDate,
+                    Days = l.Days,
+                    Reason = l.Reason,
+                    Status = l.Status
+                }).ToList()
+            };
         }
 
         public async Task CreateEmployee(CreateEmployeeDto dto)

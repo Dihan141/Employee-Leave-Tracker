@@ -11,6 +11,7 @@ namespace backend.DTOs.Leave
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
+        public int Days { get; set; }
 
         public string Reason { get; set; } = String.Empty;
 

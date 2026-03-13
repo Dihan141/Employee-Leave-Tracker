@@ -7,7 +7,7 @@ namespace backend.Interfaces.Services
     {
         Task<List<Employee>> GetEmployees();
 
-        Task<Employee?> GetEmployee(int id);
+        Task<EmployeeResponseDto?> GetEmployee(int id);
 
         Task<List<Employee>> GetEmployeesByRole(string role);
 
