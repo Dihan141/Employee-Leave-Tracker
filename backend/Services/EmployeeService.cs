@@ -20,9 +20,20 @@ namespace backend.Services
             return await _employeeRepository.GetAllAsync();
         }
 
-        public async Task<List<Employee>> GetEmployeesByRole(string role)
+        public async Task<List<EmployeeResponseDto>> GetEmployeesByRole(string role)
         {
-            return await _employeeRepository.GetByRoleAsync(role);
+            var employees = await _employeeRepository.GetByRoleAsync(role);
+
+            return employees.Select(employee => new EmployeeResponseDto
+            {
+                Id = employee.Id,
+                Name = employee.Name,
+                Email = employee.Email,
+                Role = employee.Role,
+                JoiningDate = employee.JoiningDate,
+                TotalLeaves = employee.TotalLeaves,
+                RemainingLeaves = employee.RemainingLeaves,
+            }).ToList();
         }
 
         public async Task<EmployeeResponseDto?> GetEmployee(int id)

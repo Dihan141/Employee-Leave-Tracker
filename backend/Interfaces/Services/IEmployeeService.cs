@@ -9,7 +9,7 @@ namespace backend.Interfaces.Services
 
         Task<EmployeeResponseDto?> GetEmployee(int id);
 
-        Task<List<Employee>> GetEmployeesByRole(string role);
+        Task<List<EmployeeResponseDto>> GetEmployeesByRole(string role);
 
         Task CreateEmployee(CreateEmployeeDto dto);
 

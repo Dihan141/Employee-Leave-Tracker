@@ -4,32 +4,37 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import HomeRedirect from "./pages/HomeRedirect";
 import AdminDashboard from "./pages/AdminDashboard";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomeRedirect />} />
-        <Route path="/login" element={<Login />} />
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomeRedirect />} />
+          <Route path="/login" element={<Login />} />
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute allowedRoles={["employee"]}>
-              <EmployeeDashboard />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["employee"]}>
+                <EmployeeDashboard />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/admin-dashboard"
-          element={
-            <ProtectedRoute allowedRoles={["admin"]}>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+          <Route
+            path="/admin-dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
   );
 }
