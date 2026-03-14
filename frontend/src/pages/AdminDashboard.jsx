@@ -9,11 +9,25 @@ import EmployeesTable from "../components/EmployeesTable";
 import Navbar from "../components/Navbar";
 import useEmployees from "../hooks/useEmployee";
 import EditEmployeeForm from "../components/EditEmployeeForm";
+import useDeleteEmployee from "../hooks/useDeleteEmployee";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 export default function AdminDashboard() {
   const { employees, loading, refetchEmployees } = useEmployees();
+  const { deleteEmployee, loading: deleteLoading } = useDeleteEmployee();
   const [editingEmployee, setEditingEmployee] = useState(null);
+  const [employeeToDelete, setEmployeeToDelete] = useState(null);
   const [activeTab, setActiveTab] = useState("dashboard");
+
+  const handleConfirmDelete = async () => {
+    if (!employeeToDelete) return;
+
+    await deleteEmployee(employeeToDelete.id);
+
+    setEmployeeToDelete(null);
+
+    refetchEmployees();
+  };
 
   const currentLeaves = [
     { id: 1, name: "Alice", start: "Mar 10", end: "Mar 12", reason: "Medical" },
@@ -56,6 +70,7 @@ export default function AdminDashboard() {
                 <EmployeesTable
                   employees={employees}
                   onEdit={(emp) => setEditingEmployee(emp)}
+                  onDelete={(emp) => setEmployeeToDelete(emp)}
                 />
               )}
             </>
@@ -66,6 +81,17 @@ export default function AdminDashboard() {
               employee={editingEmployee}
               onClose={() => setEditingEmployee(null)}
               refreshEmployees={refetchEmployees}
+            />
+          )}
+
+          {employeeToDelete && (
+            <ConfirmationModal
+              title="Delete Employee"
+              message={`Are you sure you want to delete ${employeeToDelete.name}?`}
+              confirmText="Delete"
+              onConfirm={handleConfirmDelete}
+              onCancel={() => setEmployeeToDelete(null)}
+              loading={deleteLoading}
             />
           )}
         </div>
