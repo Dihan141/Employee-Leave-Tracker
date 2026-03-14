@@ -33,6 +33,15 @@ namespace backend.Services
             if (employee.RemainingLeaves < days)
                 throw new Exception("Insufficient leave balance");
 
+            bool hasOverlap = await _leaveRepository.HasOverlappingLeaveAsync(
+                employeeId,
+                dto.StartDate,
+                dto.EndDate
+            );
+
+            if (hasOverlap)
+                throw new Exception("Leave request overlaps with an existing leave");
+
             var leave = new Leave
             {
                 EmployeeId = employeeId,
@@ -138,6 +147,23 @@ namespace backend.Services
             leave.Status = "Cancelled";
 
             await _leaveRepository.UpdateAsync(leave);
+        }
+
+        public async Task<List<LeaveResponseDto>> GetEmployeesCurrentlyOnLeave()
+        {
+            var leaves = await _leaveRepository.GetEmployeesCurrentlyOnLeaveAsync();
+
+            return leaves.Select(l => new LeaveResponseDto
+            {
+                Id = l.Id,
+                EmployeeId = l.EmployeeId,
+                EmployeeName = l.Employee!.Name,
+                StartDate = l.StartDate,
+                EndDate = l.EndDate,
+                Days = l.Days,
+                Reason = l.Reason,
+                Status = l.Status
+            }).ToList();
         }
     }
 }

@@ -2,7 +2,7 @@ import LeaveForm from "../components/LeaveForm";
 import LeaveHistory from "../components/LeaveHistory";
 import LeaveStats from "../components/LeaveStats";
 import Navbar from "../components/Navbar";
-import useLeaves from "../hooks/useLeave";
+import useLeavesEmployee from "../hooks/useLeavesEmployee";
 
 export default function EmployeeDashboard() {
   const {
@@ -16,7 +16,7 @@ export default function EmployeeDashboard() {
     leavesTaken,
     pendingLeaves,
     error,
-  } = useLeaves();
+  } = useLeavesEmployee();
 
   return (
     <div className="min-h-screen bg-gray-100">

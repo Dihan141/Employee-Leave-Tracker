@@ -14,4 +14,21 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+api.interceptors.response.use(
+  (response) => response,
+
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // token expired or invalid
+
+      localStorage.removeItem("token");
+
+      // redirect to login
+      window.location.href = "/login";
+    }
+
+    return Promise.reject(error);
+  },
+);
+
 export default api;

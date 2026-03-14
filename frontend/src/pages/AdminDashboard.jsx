@@ -11,13 +11,43 @@ import useEmployees from "../hooks/useEmployee";
 import EditEmployeeForm from "../components/EditEmployeeForm";
 import useDeleteEmployee from "../hooks/useDeleteEmployee";
 import ConfirmationModal from "../components/ConfirmationModal";
+import useLeavesAdmin from "../hooks/useLeavesAdmin";
+import useApproveLeave from "../hooks/useApproveLeave";
+import useRejectLeave from "../hooks/useRejectLeave";
+import useCurrentLeaves from "../hooks/useCurrentLeaves";
 
 export default function AdminDashboard() {
   const { employees, loading, refetchEmployees } = useEmployees();
   const { deleteEmployee, loading: deleteLoading } = useDeleteEmployee();
   const [editingEmployee, setEditingEmployee] = useState(null);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
+
+  const { leaves, refetchLeaves } = useLeavesAdmin();
   const [activeTab, setActiveTab] = useState("dashboard");
+
+  const { approveLeave } = useApproveLeave();
+  const { rejectLeave } = useRejectLeave();
+
+  const [leaveAction, setLeaveAction] = useState(null);
+
+  const { currentLeaves, refetchCurrentLeaves } = useCurrentLeaves();
+
+  const handleConfirmLeaveAction = async () => {
+    if (!leaveAction) return;
+
+    if (leaveAction.type === "approve") {
+      await approveLeave(leaveAction.leave.id);
+    }
+
+    if (leaveAction.type === "reject") {
+      await rejectLeave(leaveAction.leave.id);
+    }
+
+    setLeaveAction(null);
+
+    refetchLeaves();
+    refetchCurrentLeaves();
+  };
 
   const handleConfirmDelete = async () => {
     if (!employeeToDelete) return;
@@ -29,13 +59,7 @@ export default function AdminDashboard() {
     refetchEmployees();
   };
 
-  const currentLeaves = [
-    { id: 1, name: "Alice", start: "Mar 10", end: "Mar 12", reason: "Medical" },
-  ];
-
-  const pendingLeaves = [
-    { id: 2, name: "Bob", start: "Mar 15", end: "Mar 16", reason: "Vacation" },
-  ];
+  const pendingLeaves = leaves.filter((leave) => leave.status === "Pending");
 
   return (
     <div>
@@ -54,7 +78,13 @@ export default function AdminDashboard() {
 
               <CurrentLeavesTable leaves={currentLeaves} />
 
-              <PendingLeavesTable leaves={pendingLeaves} />
+              <PendingLeavesTable
+                leaves={pendingLeaves}
+                onApprove={(leave) =>
+                  setLeaveAction({ type: "approve", leave })
+                }
+                onReject={(leave) => setLeaveAction({ type: "reject", leave })}
+              />
             </>
           )}
 
@@ -74,6 +104,24 @@ export default function AdminDashboard() {
                 />
               )}
             </>
+          )}
+
+          {leaveAction && (
+            <ConfirmationModal
+              title={
+                leaveAction.type === "approve"
+                  ? "Approve Leave"
+                  : "Reject Leave"
+              }
+              message={`Are you sure you want to ${
+                leaveAction.type
+              } leave for ${leaveAction.leave.employeeName}?`}
+              confirmText={
+                leaveAction.type === "approve" ? "Approve" : "Reject"
+              }
+              onConfirm={handleConfirmLeaveAction}
+              onCancel={() => setLeaveAction(null)}
+            />
           )}
 
           {editingEmployee && (

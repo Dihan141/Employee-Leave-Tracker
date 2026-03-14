@@ -58,5 +58,28 @@ namespace backend.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<List<Leave>> GetEmployeesCurrentlyOnLeaveAsync()
+        {
+            var today = DateTime.UtcNow.Date;
+
+            return await _context.Leaves
+                .Include(l => l.Employee)
+                .Where(l => l.Status == "Approved" &&
+                            l.StartDate.Date <= today &&
+                            l.EndDate.Date >= today)
+                .ToListAsync();
+        }
+
+        public async Task<bool> HasOverlappingLeaveAsync(int employeeId, DateTime startDate, DateTime endDate)
+        {
+            return await _context.Leaves.AnyAsync(l =>
+                l.EmployeeId == employeeId &&
+                l.Status != "Rejected" &&
+                l.Status != "Cancelled" &&
+                startDate <= l.EndDate &&
+                endDate >= l.StartDate
+            );
+        }
     }
 }

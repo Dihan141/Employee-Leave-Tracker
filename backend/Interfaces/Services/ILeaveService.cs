@@ -10,6 +10,7 @@ namespace backend.Interfaces.Services
 
         Task<List<LeaveResponseDto>> GetAllLeaves();
 
+        Task<List<LeaveResponseDto>> GetEmployeesCurrentlyOnLeave();
         Task ApproveLeave(int leaveId);
 
         Task RejectLeave(int leaveId);

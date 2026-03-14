@@ -17,9 +17,13 @@ export default function CurrentLeavesTable({ leaves }) {
         <tbody>
           {leaves.map((l) => (
             <tr key={l.id} className="border-t">
-              <td className="p-2">{l.name}</td>
-              <td className="p-2">{l.start}</td>
-              <td className="p-2">{l.end}</td>
+              <td className="p-2">{l.employeeName}</td>
+              <td className="p-2">
+                {new Date(l.startDate).toLocaleDateString()}
+              </td>
+              <td className="p-2">
+                {new Date(l.endDate).toLocaleDateString()}
+              </td>
               <td className="p-2">{l.reason}</td>
             </tr>
           ))}

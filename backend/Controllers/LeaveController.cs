@@ -136,5 +136,20 @@ namespace backend.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet("current")]
+        public async Task<IActionResult> GetEmployeesCurrentlyOnLeave()
+        {
+            try
+            {
+                var employeesOnLeave = await _leaveService.GetEmployeesCurrentlyOnLeave();
+                return Ok(employeesOnLeave);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
     }
 }

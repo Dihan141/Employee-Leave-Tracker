@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
 
-export default function useLeaves() {
+export default function useLeavesEmployee() {
   const [user, setUser] = useState(null);
 
   const [form, setForm] = useState({
@@ -16,7 +16,6 @@ export default function useLeaves() {
   const fetchUser = async () => {
     try {
       const res = await api.get(`/employees/me`);
-      console.log(res.data);
 
       setUser(res.data);
     } catch (err) {
@@ -33,6 +32,7 @@ export default function useLeaves() {
 
     try {
       setLoading(true);
+      setError("");
 
       await api.post(`/leaves`, form);
 
@@ -70,7 +70,7 @@ export default function useLeaves() {
 
   const leaves = user?.leaves || [];
 
-  const leavesTaken = user?.totalLeaves - user?.remainingLeaves;
+  const leavesTaken = user ? user.totalLeaves - user.remainingLeaves : 0;
 
   const pendingLeaves = leaves.filter((l) => l.status === "Pending").length;
 
