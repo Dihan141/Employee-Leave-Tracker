@@ -8,9 +8,11 @@ import EmployeeForm from "../components/EmployeeForm";
 import EmployeesTable from "../components/EmployeesTable";
 import Navbar from "../components/Navbar";
 import useEmployees from "../hooks/useEmployee";
+import EditEmployeeForm from "../components/EditEmployeeForm";
 
 export default function AdminDashboard() {
   const { employees, loading, refetchEmployees } = useEmployees();
+  const [editingEmployee, setEditingEmployee] = useState(null);
   const [activeTab, setActiveTab] = useState("dashboard");
 
   const currentLeaves = [
@@ -51,9 +53,20 @@ export default function AdminDashboard() {
               {loading ? (
                 <p>Loading employees...</p>
               ) : (
-                <EmployeesTable employees={employees} />
+                <EmployeesTable
+                  employees={employees}
+                  onEdit={(emp) => setEditingEmployee(emp)}
+                />
               )}
             </>
+          )}
+
+          {editingEmployee && (
+            <EditEmployeeForm
+              employee={editingEmployee}
+              onClose={() => setEditingEmployee(null)}
+              refreshEmployees={refetchEmployees}
+            />
           )}
         </div>
       </div>

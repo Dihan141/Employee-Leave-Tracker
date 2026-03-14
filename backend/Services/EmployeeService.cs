@@ -114,7 +114,16 @@ namespace backend.Services
                 employee.TotalLeaves = dto.TotalLeaves.Value;
 
             if (dto.RemainingLeaves.HasValue)
+            {
+                if (dto.TotalLeaves.HasValue)
+                {
+                    if (dto.TotalLeaves < dto.RemainingLeaves)
+                    {
+                        throw new Exception("Remaining leaves can not be greater than total leaves");
+                    }
+                }
                 employee.RemainingLeaves = dto.RemainingLeaves.Value;
+            }
 
 
             if (!string.IsNullOrEmpty(dto.Password))

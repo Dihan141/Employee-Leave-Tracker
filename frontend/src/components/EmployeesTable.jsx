@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-export default function EmployeesTable({ employees }) {
+export default function EmployeesTable({ employees, onEdit }) {
   return (
     <div className="bg-white p-6 rounded-lg shadow">
       <h2 className="font-semibold mb-4">All Employees</h2>
@@ -28,7 +28,9 @@ export default function EmployeesTable({ employees }) {
               </td>
 
               <td className="p-2 space-x-2">
-                <button className="text-blue-600">Edit</button>
+                <button className="text-blue-600" onClick={() => onEdit(e)}>
+                  Edit
+                </button>
                 <button className="text-red-600">Delete</button>
               </td>
             </tr>
