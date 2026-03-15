@@ -18,13 +18,12 @@ api.interceptors.response.use(
   (response) => response,
 
   (error) => {
-    if (error.response && error.response.status === 401) {
-      // token expired or invalid
+    const status = error.response?.status;
+    const token = localStorage.getItem("token");
 
+    if (status === 401 && token) {
       localStorage.removeItem("token");
-
-      // redirect to login
-      window.location.href = "/login";
+      window.location.replace = "/login";
     }
 
     return Promise.reject(error);
