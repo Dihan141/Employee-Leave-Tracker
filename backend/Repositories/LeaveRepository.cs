@@ -61,7 +61,7 @@ namespace backend.Repositories
 
         public async Task<List<Leave>> GetEmployeesCurrentlyOnLeaveAsync()
         {
-            var today = DateTime.UtcNow.Date;
+            var today = DateTime.Today;
 
             return await _context.Leaves
                 .Include(l => l.Employee)
